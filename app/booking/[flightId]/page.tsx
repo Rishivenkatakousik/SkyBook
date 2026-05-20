@@ -15,17 +15,27 @@ export default async function BookingPage({
   const { flightId } = await params;
 
   const supabase = await createClient();
-  const [{ data: flight }, { data: seats }] = await Promise.all([
-    supabase.from("flights").select("*").eq("id", flightId).single(),
-    supabase
-      .from("seats")
-      .select("*")
-      .eq("flight_id", flightId)
-      .order("seat_number"),
-  ]);
+  const [{ data: flight }, { data: seats }, { data: myBookings }] =
+    await Promise.all([
+      supabase.from("flights").select("*").eq("id", flightId).single(),
+      supabase
+        .from("seats")
+        .select("*")
+        .eq("flight_id", flightId)
+        .order("seat_number"),
+      // RLS scopes this to the current user — used to light up their seats.
+      supabase
+        .from("bookings")
+        .select("seat_id")
+        .eq("flight_id", flightId)
+        .neq("status", "cancelled"),
+    ]);
 
   if (!flight) notFound();
   const f = flight as Flight;
+  const yourSeatIds = (myBookings ?? [])
+    .map((b) => b.seat_id as string | null)
+    .filter((id): id is string => !!id);
 
   return (
     <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
@@ -41,7 +51,11 @@ export default async function BookingPage({
         <BookingStepper />
       </div>
 
-      <BookingClient flight={f} seats={(seats ?? []) as Seat[]} />
+      <BookingClient
+        flight={f}
+        seats={(seats ?? []) as Seat[]}
+        yourSeatIds={yourSeatIds}
+      />
     </div>
   );
 }

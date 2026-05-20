@@ -9,9 +9,11 @@ import type { Flight, Seat } from "@/lib/types";
 export function BookingClient({
   flight,
   seats,
+  yourSeatIds,
 }: {
   flight: Flight;
   seats: Seat[];
+  yourSeatIds?: string[];
 }) {
   const selectedFlight = useFlightStore((s) => s.selectedFlight);
   const setSelectedFlight = useFlightStore((s) => s.setSelectedFlight);
@@ -23,7 +25,11 @@ export function BookingClient({
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-      <SeatMap flightId={flight.id} initialSeats={seats} />
+      <SeatMap
+        flightId={flight.id}
+        initialSeats={seats}
+        yourSeatIds={yourSeatIds}
+      />
       <PassengerForm flightId={flight.id} />
     </div>
   );
