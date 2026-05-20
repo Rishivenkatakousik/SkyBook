@@ -9,7 +9,11 @@ export const searchSchema = z
     origin: z.string().trim().min(2, "Select an origin"),
     destination: z.string().trim().min(2, "Select a destination"),
     date: dateString,
-    pax: z.coerce.number().int().min(1, "At least 1 passenger").max(9, "Max 9 passengers"),
+    pax: z
+      .number()
+      .int()
+      .min(1, "At least 1 passenger")
+      .max(9, "Max 9 passengers"),
   })
   .refine((d) => d.origin !== d.destination, {
     message: "Origin and destination must differ",
