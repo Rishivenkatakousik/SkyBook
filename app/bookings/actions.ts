@@ -13,6 +13,8 @@ export type ActionResult<T = undefined> =
 const ERRORS: Record<string, string> = {
   CANCEL_WINDOW_CLOSED:
     "Cancellations are blocked within 2 hours of departure.",
+  RESCHEDULE_WINDOW_CLOSED:
+    "Reschedules are blocked within 2 hours of departure.",
   NOT_FOUND: "Booking not found.",
   ALREADY_CANCELLED: "This booking is already cancelled.",
   NOT_AUTHENTICATED: "Please sign in.",
