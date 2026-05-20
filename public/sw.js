@@ -62,11 +62,15 @@ self.addEventListener("fetch", (event) => {
   }
 
   // Flight search / API: StaleWhileRevalidate.
+  // /search/* is a page navigation, so we also fall back to /offline if both
+  // network AND cache miss (e.g. offline on first visit).
   if (
     url.pathname.startsWith("/api/flights") ||
     url.pathname.startsWith("/search/")
   ) {
-    event.respondWith(staleWhileRevalidate(req, DATA_CACHE));
+    const isHtml =
+      req.mode === "navigate" || req.headers.get("accept")?.includes("text/html");
+    event.respondWith(staleWhileRevalidate(req, DATA_CACHE, isHtml));
     return;
   }
 
@@ -89,7 +93,7 @@ async function cacheFirst(req, cacheName) {
   }
 }
 
-async function staleWhileRevalidate(req, cacheName) {
+async function staleWhileRevalidate(req, cacheName, htmlOfflineFallback = false) {
   const cache = await caches.open(cacheName);
   const hit = await cache.match(req);
   const fresh = fetch(req)
@@ -97,7 +101,14 @@ async function staleWhileRevalidate(req, cacheName) {
       if (res.ok) cache.put(req, res.clone());
       return res;
     })
-    .catch(() => hit);
+    .catch(async () => {
+      if (hit) return hit;
+      if (htmlOfflineFallback) {
+        const offline = await caches.match("/offline");
+        if (offline) return offline;
+      }
+      return Response.error();
+    });
   return hit || fresh;
 }
 

@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export const metadata = {
   title: "Offline — SkyBook",
 };
@@ -15,12 +13,14 @@ export default function OfflinePage() {
         We can&apos;t reach the network right now. Your previously visited
         bookings are still readable.
       </p>
-      <Link
+      {/* Plain <a>, NOT next/link — we need a full browser navigation so the
+          service worker can intercept and serve the cached /bookings HTML. */}
+      <a
         href="/bookings"
         className="mt-6 rounded-lg bg-brand-600 px-5 py-3 text-sm font-medium text-white"
       >
         View cached bookings
-      </Link>
+      </a>
     </div>
   );
 }
