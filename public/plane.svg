@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
+  <defs>
+    <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F4F6FF"/>
+      <stop offset="100%" stop-color="#DDE5FF"/>
+    </linearGradient>
+    <linearGradient id="wg" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#EEF2FF"/>
+      <stop offset="100%" stop-color="#818CF8"/>
+    </linearGradient>
+    <linearGradient id="eg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="45%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </linearGradient>
+    <linearGradient id="esg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E0E7FF"/>
+      <stop offset="100%" stop-color="#C7D2FE"/>
+    </linearGradient>
+    <filter id="ps" x="-15%" y="-20%" width="130%" height="155%">
+      <feDropShadow dx="0" dy="22" stdDeviation="20" flood-color="#4338CA" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Full plane group rotated -12 degrees around fuselage center -->
+  <g transform="rotate(-12, 425, 228)" filter="url(#ps)">
+
+    <!-- Horizontal tail stabilizer (behind fuselage) -->
+    <path d="M 105,242 C 95,242 76,252 57,276 C 49,287 53,295 63,293 L 132,263 L 134,245 Z"
+          fill="url(#wg)" stroke="#A5B4FC" stroke-width="1.5"/>
+    <path d="M 57,276 C 47,287 50,303 61,299 C 69,296 71,285 63,293 Z" fill="#818CF8"/>
+
+    <!-- Main wing -->
+    <path d="M 425,216 L 262,405 C 256,415 270,420 278,411 L 438,263 C 463,244 460,212 446,210 Z"
+          fill="url(#wg)" stroke="#A5B4FC" stroke-width="1.5"/>
+    <!-- Wing highlight -->
+    <path d="M 430,216 L 278,385 L 440,258 L 452,214 Z" fill="white" opacity="0.16"/>
+    <!-- Wing root leading edge accent -->
+    <line x1="428" y1="214" x2="448" y2="212" stroke="#818CF8" stroke-width="2" stroke-linecap="round"/>
+    <!-- Winglet -->
+    <path d="M 262,405 C 252,418 255,434 267,432 C 279,430 284,418 278,411 Z" fill="#6366F1"/>
+
+    <!-- Engine pylon -->
+    <path d="M 298,306 L 293,366 L 319,366 L 316,306 Z" fill="url(#esg)" stroke="#C7D2FE" stroke-width="0.5"/>
+    <!-- Engine nacelle -->
+    <rect x="252" y="364" width="112" height="30" rx="15" fill="url(#eg)" stroke="#4338CA" stroke-width="1.5"/>
+    <!-- Inlet disc -->
+    <circle cx="252" cy="379" r="15" fill="#1E1B4B" stroke="#4338CA" stroke-width="1.5"/>
+    <circle cx="252" cy="379" r="9" fill="#312E81"/>
+    <circle cx="252" cy="379" r="4" fill="#4F46E5" opacity="0.85"/>
+    <!-- Exhaust nozzle -->
+    <ellipse cx="364" cy="379" rx="10" ry="13" fill="#4F46E5" stroke="#3730A3" stroke-width="1"/>
+
+    <!-- Main fuselage + integrated nose cone -->
+    <path d="
+      M 90,228
+      C 90,207 111,203 148,202
+      L 700,198
+      C 726,198 750,208 762,222
+      C 768,228 762,234 750,240
+      C 734,250 720,254 700,254
+      L 148,258
+      C 111,258 90,252 90,228 Z
+    " fill="url(#fg)" stroke="#C7D2FE" stroke-width="1.5"/>
+
+    <!-- Vertical tail stabilizer -->
+    <path d="
+      M 120,222
+      C 117,222 111,216 113,193
+      L 122,130
+      C 124,118 138,116 148,123
+      L 156,132
+      C 162,140 160,157 153,168
+      L 137,204
+      C 133,213 129,222 122,222 Z
+    " fill="url(#fg)" stroke="#C7D2FE" stroke-width="1.5"/>
+    <!-- Tail color accent -->
+    <path d="M 126,218 L 120,170 C 126,162 142,160 150,164 L 146,215 Z" fill="#4F46E5" opacity="0.28"/>
+
+    <!-- Cockpit windshield -->
+    <path d="M 724,206 C 737,207 750,214 754,224 C 740,232 722,228 720,219 Z" fill="#93C5FD" opacity="0.5"/>
+    <line x1="736" y1="206" x2="737" y2="220" stroke="#93C5FD" stroke-width="1" opacity="0.6"/>
+
+    <!-- Passenger windows -->
+    <g fill="#BFDBFE" opacity="0.9">
+      <rect x="670" y="211" width="16" height="10" rx="4"/>
+      <rect x="641" y="210" width="16" height="10" rx="4"/>
+      <rect x="612" y="209" width="16" height="10" rx="4"/>
+      <rect x="583" y="209" width="16" height="10" rx="4"/>
+      <rect x="554" y="208" width="16" height="10" rx="4"/>
+      <rect x="525" y="208" width="16" height="10" rx="4"/>
+      <rect x="496" y="207" width="16" height="10" rx="4"/>
+      <rect x="467" y="207" width="16" height="10" rx="4"/>
+      <rect x="438" y="207" width="16" height="10" rx="4"/>
+    </g>
+
+    <!-- Brand color stripes -->
+    <path d="M 148,240 L 700,236 L 746,232 L 746,240 L 700,246 L 148,250 Z" fill="#4F46E5" opacity="0.22"/>
+    <path d="M 148,232 L 700,228 L 746,224 L 746,230 L 700,234 L 148,238 Z" fill="#818CF8" opacity="0.11"/>
+
+    <!-- Landing gear door outlines (subtle detail) -->
+    <rect x="347" y="250" width="28" height="7" rx="2" fill="#C7D2FE" opacity="0.5"/>
+    <rect x="595" y="246" width="22" height="6" rx="2" fill="#C7D2FE" opacity="0.4"/>
+
+  </g>
+</svg>
