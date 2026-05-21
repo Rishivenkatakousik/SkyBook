@@ -2,7 +2,6 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { requireUser } from "@/lib/dal";
 import { BookingCard } from "@/components/bookings/BookingCard";
-import { CacheWarmer } from "@/components/bookings/CacheWarmer";
 import type { BookingWithRelations } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +22,6 @@ export default async function BookingsPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
-      <CacheWarmer path="/bookings" />
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-semibold">My bookings</h1>
         <Link

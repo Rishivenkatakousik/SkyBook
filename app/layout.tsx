@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { Nav } from "@/components/Nav";
-import { SWRegister } from "@/components/pwa/SWRegister";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import "./globals.css";
 
@@ -39,7 +38,6 @@ export default function RootLayout({
         <Nav />
         <main className="flex flex-1 flex-col">{children}</main>
         <Toaster richColors position="top-center" />
-        <SWRegister />
         <InstallPrompt />
       </body>
     </html>

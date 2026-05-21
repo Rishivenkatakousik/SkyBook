@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem *)",
+      "Bash(xargs grep -l \"deprecated\\\\|breaking\")",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)",
+      "Bash(npx next *)",
+      "Bash(node -e \"try{const s=require\\('sharp'\\);console.log\\('sharp ok',s.versions||'unknown'\\)}catch\\(e\\){console.log\\('no sharp'\\)}\")",
+      "Bash(node scripts/generate-icons.mjs)"
+    ]
+  }
+}

@@ -17,9 +17,9 @@ A responsive, production-leaning flight booking PWA: search flights, pick a seat
 | Styling | **Tailwind v4** (CSS `@theme`, no `tailwind.config.js`) |
 | Forms / validation | react-hook-form + zod |
 | Toasts | sonner |
-| PWA | **Hand-written service worker + manifest** (see [PWA notes](#pwa)) |
+| PWA | **`@ducanh2912/next-pwa`** (workbox under the hood) + custom `manifest.json` (see [PWA notes](#pwa)) |
 
-> ⚠️ This repo uses Next.js 16, which has breaking changes from the version in most LLM training data: `params`/`searchParams`/`cookies()` are async, `middleware` is renamed to **`proxy`**, Turbopack is the default bundler. `next-pwa` is **not** used because it's webpack-only and incompatible with Turbopack.
+> ⚠️ This repo uses Next.js 16, which has breaking changes from the version in most LLM training data: `params`/`searchParams`/`cookies()` are async, `middleware` is renamed to **`proxy`**, Turbopack is the default bundler. The PWA plugin wraps `workbox-webpack-plugin`, so the **production build runs on webpack** (`next build --webpack`). Dev stays on Turbopack — the SW is disabled in dev anyway.
 
 ---
 
@@ -125,12 +125,12 @@ components/
 ├── results/FlightCard.tsx
 ├── seatmap/SeatMap.tsx                ← live Realtime channel
 ├── booking/{BookingClient,BookingStepper,PassengerForm,ResetBookingOnMount}.tsx
-├── bookings/{BookingCard,ConfirmDialog,RescheduleDialog,CacheWarmer}.tsx
-├── pwa/{SWRegister,InstallPrompt}.tsx
+├── bookings/{BookingCard,ConfirmDialog,RescheduleDialog}.tsx
+├── pwa/InstallPrompt.tsx
 └── ui/{Button,Badge,Input,Dialog,Spinner}.tsx
 
 supabase/migrations/                   ← all SQL, applied via Dashboard SQL Editor
-public/{manifest.json, sw.js, icons/} ← hand-written PWA
+public/{manifest.json, icons/}        ← static PWA assets (sw.js + workbox-* generated at build)
 proxy.ts                               ← session refresh + optimistic route guard
 ```
 
@@ -215,17 +215,16 @@ Proxy + DAL together follow Next.js's "data security" recommendation: don't trus
 
 ## PWA
 
-`next-pwa@5` is webpack-only and breaks under Next 16's default Turbopack bundler, so the PWA is **hand-written**:
+The PWA layer is built on **`@ducanh2912/next-pwa`** (the actively-maintained fork of `next-pwa`), which wraps Google's Workbox. Because the plugin internally uses `workbox-webpack-plugin`, the production build runs on webpack (`next build --webpack`); `next dev` stays on Turbopack and the SW is disabled there.
 
-- `public/manifest.json` — name, short_name, `display: standalone`, theme `#2563eb`, 192/512 + maskable icons.
-- `public/sw.js` — single hand-written service worker. Strategies match the brief:
-  - **StaleWhileRevalidate** for `/api/flights` and `/search/*` (HTML *and* RSC payloads). Falls through to `/offline` if both network and cache miss.
-  - **CacheFirst** for `/_next/static`, `/icons`, fonts, and common image/font extensions.
-  - **Network-first navigations** elsewhere (incl. `/bookings`) with fallback to last cached, then `/offline`.
-  - Versioned cache namespace (`skybook-v1-*`) — old caches deleted on `activate`.
-- `components/pwa/SWRegister.tsx` — registers only in production (keeps dev HMR clean).
+- `public/manifest.json` — hand-written manifest. Name, short_name, `display: standalone`, theme `#2563eb`, 192/512 + maskable icons.
+- `next.config.ts` — `withPWAInit({ dest: "public", register: true, fallbacks: { document: "/offline" }, workboxOptions: { runtimeCaching: [...] } })`. The runtime-caching rules match the brief:
+  - **StaleWhileRevalidate** for `/search/*` and `/api/flights*` (search results).
+  - **CacheFirst** for `/_next/static/*`, `/icons/*`, fonts, and common image/font extensions.
+  - **NetworkFirst** for `/bookings` so the page stays current online but the last-good HTML serves when offline.
+  - `additionalManifestEntries` precaches `/offline` and `/bookings` at SW install.
+- Generated artefacts (gitignored): `public/sw.js`, `public/workbox-*.js`, `public/fallback-*.js`.
 - `components/pwa/InstallPrompt.tsx` — captures `beforeinstallprompt`, dismissible banner stored in `localStorage`.
-- `components/bookings/CacheWarmer.tsx` — quietly re-fetches `/bookings` with `Accept: text/html` on every online visit so the offline copy stays current. (Without this, Next.js client-side nav uses RSC fetches that the SW doesn't intercept, so the HTML never lands in cache.)
 - `scripts/generate-icons.mjs` — regenerate the three PNGs from inline SVG with sharp.
 
 ### How to test the PWA
@@ -265,7 +264,7 @@ After deploy, in your Supabase project's **Authentication → URL Configuration*
 
 These were conscious calls given the deadline; documented here per the brief's request.
 
-- **`next-pwa` unusable on Turbopack → manual SW.** PRD explicitly asks for `next-pwa`. Trade: less automatic precaching, more explicit control, smaller bundle. Explained above.
+- **Production build on webpack.** `@ducanh2912/next-pwa` wraps `workbox-webpack-plugin`, so `next build --webpack` is required. Dev still runs on Turbopack, so the slower bundler only kicks in for `npm run build` / `npm run start`.
 - **PNR generation is server-side** inside `reserve_seat` (retry loop on unique-violation). The client-side `generatePnr()` in `lib/pnr.ts` is only used for display fallbacks and tests.
 - **Reschedule drops the seat assignment** (`seat_id = null` after reschedule). A real implementation would let the user re-pick a seat on the new flight; we just free the old seat and consider the new booking seatless. The booking remains valid because of the partial unique index condition (`seat_id IS NOT NULL`). Documented in the reschedule confirmation toast.
 - **Multi-passenger single-seat bookings.** The schema permits N passengers per booking but only one `seat_id` per booking row. The form collects N passengers' details (per the brief), but they all share one seat on this flight. Real-world: one booking → N seats, modeled as a `booking_seats` join table.
