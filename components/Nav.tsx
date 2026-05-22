@@ -8,7 +8,7 @@ export async function Nav() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/20 bg-white/75 backdrop-blur-xl">
-      <div className="relative mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-5 lg:px-8">
+      <div className="relative mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-5 lg:px-8">
 
         {/* Logo */}
         <Link
@@ -23,37 +23,40 @@ export async function Nav() {
           </span>
         </Link>
 
-        {/* Center nav — hidden on mobile */}
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium text-gray-500 md:flex">
-          {user ? (
-            <>
-              <Link href="/" className="transition-colors hover:text-indigo-600">
-                Search
-              </Link>
-              <Link href="/bookings" className="transition-colors hover:text-indigo-600">
-                My Bookings
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/" className="transition-colors hover:text-gray-900">Home</Link>
-              <Link href="/" className="transition-colors hover:text-gray-900">Destinations</Link>
-              <Link href="/" className="transition-colors hover:text-gray-900">Offers</Link>
-            </>
-          )}
-        </nav>
+        {/* Center nav — guests only, hidden on mobile */}
+        {!user && (
+          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-sm font-medium text-gray-500 md:flex">
+            <Link href="/" className="transition-colors hover:text-gray-900">Home</Link>
+            <Link href="/" className="transition-colors hover:text-gray-900">Destinations</Link>
+            <Link href="/" className="transition-colors hover:text-gray-900">Offers</Link>
+          </nav>
+        )}
 
         {/* Right side */}
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3 sm:gap-4">
           {user ? (
-            <form action={logout}>
-              <button
-                type="submit"
-                className="cursor-pointer text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+            <>
+              <Link
+                href="/"
+                className="hidden text-sm font-medium text-gray-600 transition-colors hover:text-indigo-600 sm:inline"
               >
-                Sign out
-              </button>
-            </form>
+                Search
+              </Link>
+              <Link
+                href="/bookings"
+                className="text-sm font-medium text-gray-700 transition-colors hover:text-indigo-600"
+              >
+                My Bookings
+              </Link>
+              <form action={logout}>
+                <button
+                  type="submit"
+                  className="cursor-pointer text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+                >
+                  Sign out
+                </button>
+              </form>
+            </>
           ) : (
             <>
               <Link
@@ -64,7 +67,7 @@ export async function Nav() {
               </Link>
               <Link
                 href="/signup"
-                className="rounded-full bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-all hover:bg-indigo-700 hover:scale-[1.02] hover:shadow-indigo-500/35 active:scale-[0.98]"
+                className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-all hover:bg-indigo-700 hover:scale-[1.02] hover:shadow-indigo-500/35 active:scale-[0.98] sm:px-5"
               >
                 Sign up
               </Link>

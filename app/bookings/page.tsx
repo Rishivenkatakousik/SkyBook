@@ -21,9 +21,9 @@ export default async function BookingsPage() {
   const bookings = (data ?? []) as unknown as BookingWithRelations[];
 
   return (
-    <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">My bookings</h1>
+    <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:py-8">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-xl font-semibold sm:text-2xl">My bookings</h1>
         <Link
           href="/"
           className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white"

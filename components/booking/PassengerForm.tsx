@@ -58,7 +58,7 @@ export function PassengerForm({ flightId }: { flightId: string }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-6 rounded-2xl bg-surface p-6 shadow-sm"
+      className="flex flex-col gap-6 rounded-2xl bg-surface p-4 shadow-sm sm:p-6"
     >
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">Passenger details</h3>

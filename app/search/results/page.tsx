@@ -33,10 +33,10 @@ export default async function ResultsPage({
   const list = (flights ?? []) as Flight[];
 
   return (
-    <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold">
+    <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-6 sm:py-8">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="text-lg font-semibold sm:text-xl">
             {origin} → {destination}
           </h1>
           <p className="text-sm text-muted">
@@ -45,7 +45,7 @@ export default async function ResultsPage({
             {list.length === 1 ? "" : "s"}
           </p>
         </div>
-        <Link href="/" className="text-sm font-medium text-brand-600">
+        <Link href="/" className="shrink-0 text-sm font-medium text-brand-600">
           Modify search
         </Link>
       </div>

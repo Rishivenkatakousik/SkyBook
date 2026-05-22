@@ -95,57 +95,59 @@ export function SeatMap({
         </div>
       </header>
 
-      <div className="seat-grid max-h-[60vh] overflow-auto p-4">
-        {/* Nose-of-plane indicator */}
-        <div className="mx-auto mb-3 h-4 w-20 rounded-t-full border-t border-l border-r border-border" />
+      <div className="seat-grid max-h-[60vh] overflow-auto p-3 sm:p-4">
+        <div className="min-w-max">
+          {/* Nose-of-plane indicator */}
+          <div className="mx-auto mb-3 h-4 w-20 rounded-t-full border-t border-l border-r border-border" />
 
-        {/* Column header (aisle gap between C and D) */}
-        <div className="mb-2 ml-8 flex items-center gap-1.5 text-[10px] text-muted">
-          {COLS.map((c) => (
-            <Fragment key={c}>
-              {c === "D" && <span className="w-3" aria-hidden="true" />}
-              <span className="w-10 text-center">{c}</span>
-            </Fragment>
+          {/* Column header (aisle gap between C and D) */}
+          <div className="mb-2 ml-8 flex items-center gap-1.5 text-[10px] text-muted">
+            {COLS.map((c) => (
+              <Fragment key={c}>
+                {c === "D" && <span className="w-3" aria-hidden="true" />}
+                <span className="w-9 text-center sm:w-10">{c}</span>
+              </Fragment>
+            ))}
+          </div>
+
+          {zones.map(({ cls, byRow, rows }, zi) => (
+            <section key={cls} className={cn(zi > 0 && "mt-5 border-t border-dashed border-border pt-3")}>
+              <h4 className="mb-2 ml-8 text-xs font-semibold uppercase tracking-wide text-muted">
+                {CLASS_LABEL[cls]}
+              </h4>
+              <div className="flex flex-col gap-1.5">
+                {rows.map((row) => {
+                  const rowSeats = byRow.get(row)!;
+                  return (
+                    <div key={row} className="flex items-center gap-1.5">
+                      <span className="w-6 text-right text-[11px] text-muted">
+                        {row}
+                      </span>
+                      {COLS.map((c) => {
+                        const seat = rowSeats.get(c);
+                        return (
+                          <Fragment key={c}>
+                            {c === "D" && <span className="w-3" aria-hidden="true" />}
+                            {seat ? (
+                              <SeatButton
+                                seat={seat}
+                                isYours={yourSeatIds.includes(seat.id)}
+                                isSelected={selectedSeat?.id === seat.id}
+                                onSelect={() => selectSeatOptimistic(seat)}
+                              />
+                            ) : (
+                              <span className="h-9 w-9 shrink-0 sm:h-10 sm:w-10" aria-hidden="true" />
+                            )}
+                          </Fragment>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
           ))}
         </div>
-
-        {zones.map(({ cls, byRow, rows }, zi) => (
-          <section key={cls} className={cn(zi > 0 && "mt-5 border-t border-dashed border-border pt-3")}>
-            <h4 className="mb-2 ml-8 text-xs font-semibold uppercase tracking-wide text-muted">
-              {CLASS_LABEL[cls]}
-            </h4>
-            <div className="flex flex-col gap-1.5">
-              {rows.map((row) => {
-                const rowSeats = byRow.get(row)!;
-                return (
-                  <div key={row} className="flex items-center gap-1.5">
-                    <span className="w-6 text-right text-[11px] text-muted">
-                      {row}
-                    </span>
-                    {COLS.map((c) => {
-                      const seat = rowSeats.get(c);
-                      return (
-                        <Fragment key={c}>
-                          {c === "D" && <span className="w-3" aria-hidden="true" />}
-                          {seat ? (
-                            <SeatButton
-                              seat={seat}
-                              isYours={yourSeatIds.includes(seat.id)}
-                              isSelected={selectedSeat?.id === seat.id}
-                              onSelect={() => selectSeatOptimistic(seat)}
-                            />
-                          ) : (
-                            <span className="h-10 w-10 shrink-0" aria-hidden="true" />
-                          )}
-                        </Fragment>
-                      );
-                    })}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        ))}
       </div>
 
       {selectedSeat && (
@@ -195,7 +197,7 @@ function SeatButton({
       title={tooltip}
       aria-label={`Seat ${seat.seat_number}, ${tooltip}`}
       className={cn(
-        "flex h-10 w-10 shrink-0 items-center justify-center rounded-md border text-[10px] font-medium transition",
+        "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border text-[10px] font-medium transition sm:h-10 sm:w-10",
         isYours && "border-seat-yours bg-seat-yours text-white",
         !isYours && isSelected && "border-seat-selected bg-seat-selected text-white",
         !isYours && !isSelected && occupied && "cursor-not-allowed border-seat-occupied bg-seat-occupied text-muted",

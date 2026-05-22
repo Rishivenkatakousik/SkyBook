@@ -38,10 +38,10 @@ export default async function BookingPage({
     .filter((id): id is string => !!id);
 
   return (
-    <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-semibold">
+    <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 sm:py-8">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+        <div className="min-w-0">
+          <h1 className="text-lg font-semibold sm:text-xl">
             {f.flight_no} · {f.origin} → {f.destination}
           </h1>
           <p className="text-sm text-muted">

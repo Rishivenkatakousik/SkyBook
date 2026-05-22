@@ -62,7 +62,7 @@ export function SearchForm({
   const errorCls = "px-0.5 text-xs text-danger";
 
   return (
-    <div className="rounded-3xl border border-white/60 bg-white/85 p-6 shadow-2xl shadow-indigo-100/30 backdrop-blur-2xl lg:p-7">
+    <div className="rounded-2xl border border-white/60 bg-white/85 p-4 shadow-2xl shadow-indigo-100/30 backdrop-blur-2xl sm:rounded-3xl sm:p-6 lg:p-7">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
 
@@ -150,7 +150,7 @@ export function SearchForm({
           {/* ── Search button ── */}
           <button
             type="submit"
-            className="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-8 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:scale-[1.02] hover:shadow-indigo-500/40 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-indigo-600 lg:shrink-0"
+            className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-6 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:scale-[1.02] hover:shadow-indigo-500/40 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-indigo-600 sm:px-8 lg:w-auto lg:shrink-0"
           >
             Search flights
             <ArrowRight className="h-4 w-4" />

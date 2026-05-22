@@ -38,9 +38,9 @@ export default async function ConfirmationPage({
   const booking = data as unknown as Row;
 
   return (
-    <div className="mx-auto w-full max-w-xl flex-1 px-4 py-12">
+    <div className="mx-auto w-full max-w-xl flex-1 px-4 py-8 sm:py-12">
       <ResetBookingOnMount />
-      <div className="rounded-2xl bg-surface p-8 text-center shadow-sm">
+      <div className="rounded-2xl bg-surface p-6 text-center shadow-sm sm:p-8">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-success/10 text-3xl">
           ✓
         </div>
@@ -81,16 +81,16 @@ export default async function ConfirmationPage({
           </div>
         )}
 
-        <div className="mt-8 flex gap-3">
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/bookings"
-            className="flex-1 rounded-lg bg-brand-600 px-4 py-3 text-sm font-medium text-white"
+            className="flex-1 rounded-lg bg-brand-600 px-4 py-3 text-center text-sm font-medium text-white"
           >
             View my bookings
           </Link>
           <Link
             href="/"
-            className="flex-1 rounded-lg border border-border px-4 py-3 text-sm font-medium"
+            className="flex-1 rounded-lg border border-border px-4 py-3 text-center text-sm font-medium"
           >
             Book another
           </Link>
@@ -102,9 +102,9 @@ export default async function ConfirmationPage({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between border-b border-border py-2 last:border-0">
-      <span className="text-muted">{label}</span>
-      <span className="font-medium text-foreground">{value}</span>
+    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-border py-2 last:border-0">
+      <span className="shrink-0 text-muted">{label}</span>
+      <span className="text-right font-medium text-foreground break-words">{value}</span>
     </div>
   );
 }

@@ -25,11 +25,11 @@ export function FlightCard({ flight }: { flight: Flight }) {
   };
 
   return (
-    <div className="rounded-2xl bg-surface p-5 shadow-sm transition hover:shadow-md">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-semibold">{flight.flight_no}</span>
+    <div className="rounded-2xl bg-surface p-4 shadow-sm transition hover:shadow-md sm:p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-base font-semibold sm:text-lg">{flight.flight_no}</span>
             <Badge>{flight.aircraft_type ?? "Aircraft"}</Badge>
           </div>
           <p className="mt-1 text-sm text-muted">
@@ -41,12 +41,14 @@ export function FlightCard({ flight }: { flight: Flight }) {
             {flight.origin} → {flight.destination}
           </p>
         </div>
-        <div className="text-right">
-          <p className="text-xl font-bold text-foreground">
-            {formatPrice(flight.base_price)}
-          </p>
-          <p className="text-xs text-muted">from · economy</p>
-          <Button onClick={select} className="mt-2">
+        <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end sm:text-right">
+          <div>
+            <p className="text-lg font-bold text-foreground sm:text-xl">
+              {formatPrice(flight.base_price)}
+            </p>
+            <p className="text-xs text-muted">from · economy</p>
+          </div>
+          <Button onClick={select} className="sm:mt-2">
             Select
           </Button>
         </div>
