@@ -1,16 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
+import Image from "next/image";
 import { SearchForm } from "@/components/search/SearchForm";
+import { getAirports } from "@/lib/airports";
 
 export default async function HomePage() {
-  const supabase = await createClient();
-  const { data: flights } = await supabase
-    .from("flights")
-    .select("origin, destination");
-
-  const origins = [...new Set((flights ?? []).map((f) => f.origin))].sort();
-  const destinations = [
-    ...new Set((flights ?? []).map((f) => f.destination)),
-  ].sort();
+  const { origins, destinations } = await getAirports();
 
   return (
     <section className="relative flex flex-1 flex-col overflow-hidden bg-gradient-to-br from-[#EEF4FF] via-[#F5F8FF] to-white">
@@ -36,10 +29,15 @@ export default async function HomePage() {
                 aria-hidden="true"
                 className="absolute left-1/2 top-1/2 h-[200px] w-[200px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-200/40 blur-[55px] sm:h-[280px] sm:w-[280px] lg:h-[360px] lg:w-[360px]"
               />
-              <img
+              <Image
                 src="/flight.png"
                 alt="Commercial airplane in flight"
-                className="relative w-full rounded-2xl object-cover motion-safe:animate-float"
+                width={677}
+                height={368}
+                sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 50vw"
+                loading="eager"
+                fetchPriority="high"
+                className="relative h-auto w-full rounded-2xl object-cover motion-safe:animate-float"
                 style={{ filter: "drop-shadow(0px 24px 48px rgba(0,0,0,0.18))" }}
               />
             </div>
@@ -100,7 +98,7 @@ export default async function HomePage() {
 
         {/* ── Floating search card ── */}
         <div
-          className="pb-8 motion-safe:animate-fade-up sm:pb-10 lg:pb-14"
+          className="min-h-[460px] pb-8 motion-safe:animate-fade-up sm:min-h-[280px] sm:pb-10 lg:min-h-[180px] lg:pb-14"
           style={{ animationDelay: "320ms" }}
         >
           <SearchForm origins={origins} destinations={destinations} />

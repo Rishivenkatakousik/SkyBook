@@ -76,7 +76,11 @@ export function SearchForm({
                 From
               </span>
               <div className="relative">
-                <select className={selectCls} {...register("origin")}>
+                <select
+                  aria-label="Origin airport"
+                  className={selectCls}
+                  {...register("origin")}
+                >
                   {origins.map((o) => (
                     <option key={o} value={o}>
                       {o}
@@ -97,7 +101,11 @@ export function SearchForm({
                 To
               </span>
               <div className="relative">
-                <select className={selectCls} {...register("destination")}>
+                <select
+                  aria-label="Destination airport"
+                  className={selectCls}
+                  {...register("destination")}
+                >
                   {destinations.map((d) => (
                     <option key={d} value={d}>
                       {d}
@@ -119,6 +127,7 @@ export function SearchForm({
               </span>
               <input
                 type="date"
+                aria-label="Departure date"
                 min={today}
                 className={`${inputCls} [color-scheme:light]`}
                 {...register("date")}
@@ -136,6 +145,7 @@ export function SearchForm({
               </span>
               <input
                 type="number"
+                aria-label="Number of passengers"
                 min={1}
                 max={9}
                 className={inputCls}
