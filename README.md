@@ -9,15 +9,15 @@ A responsive, production-leaning flight booking PWA: search flights, pick a seat
 
 ## Tech stack
 
-| Layer | Choice |
-|---|---|
-| Framework | **Next.js 16.2** (App Router, Turbopack, Server Components, Server Actions) |
-| DB + Auth + Realtime | **Supabase** (PostgreSQL, RLS, `SECURITY DEFINER` RPCs, Realtime channels) |
-| State | **Zustand 5** with `persist` + `partialize` |
-| Styling | **Tailwind v4** (CSS `@theme`, no `tailwind.config.js`) |
-| Forms / validation | react-hook-form + zod |
-| Toasts | sonner |
-| PWA | **`@ducanh2912/next-pwa`** (workbox under the hood) + custom `manifest.json` (see [PWA notes](#pwa)) |
+| Layer                | Choice                                                                                               |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| Framework            | **Next.js 16.2** (App Router, Turbopack, Server Components, Server Actions)                          |
+| DB + Auth + Realtime | **Supabase** (PostgreSQL, RLS, `SECURITY DEFINER` RPCs, Realtime channels)                           |
+| State                | **Zustand 5** with `persist` + `partialize`                                                          |
+| Styling              | **Tailwind v4** (CSS `@theme`, no `tailwind.config.js`)                                              |
+| Forms / validation   | react-hook-form + zod                                                                                |
+| Toasts               | sonner                                                                                               |
+| PWA                  | **`@ducanh2912/next-pwa`** (workbox under the hood) + custom `manifest.json` (see [PWA notes](#pwa)) |
 
 > ⚠️ This repo uses Next.js 16, which has breaking changes from the version in most LLM training data: `params`/`searchParams`/`cookies()` are async, `middleware` is renamed to **`proxy`**, Turbopack is the default bundler. The PWA plugin wraps `workbox-webpack-plugin`, so the **production build runs on webpack** (`next build --webpack`). Dev stays on Turbopack — the SW is disabled in dev anyway.
 
@@ -34,6 +34,7 @@ npm install
 ### 2. Create a Supabase project
 
 [supabase.com](https://supabase.com) → New project. Copy from **Project Settings → API**:
+
 - Project URL
 - `anon` public key
 
@@ -73,7 +74,7 @@ select (select count(*) from flights)  as flights,    -- 9
        (select count(*) from bookings) as bookings;   -- 2 (seeded demo)
 ```
 
-If the seed's test-user `do $$ … $$;` block raised a notice, create `test@flights.dev` / `Passw0rd!` manually via **Authentication → Users → Add user** (tick *Auto Confirm User*), then re-run **only the second `do $$ … $$;` block** in `0004_seed.sql` to attach the sample bookings.
+If the seed's test-user `do $$ … $$;` block raised a notice, create `test@flights.dev` / `Passw0rd!` manually via **Authentication → Users → Add user** (tick _Auto Confirm User_), then re-run **only the second `do $$ … $$;` block** in `0004_seed.sql` to attach the sample bookings.
 
 ### 5. Run
 
@@ -152,11 +153,12 @@ state:
 ```
 
 **Persistence** (`persist` middleware, `localStorage`):
+
 - `partialize` includes `searchQuery`, `selectedFlight`, `selectedSeat`, `bookingStep`, and `passengers` — but **passengers are remapped to drop `passport_no`** before write. Passport numbers never reach localStorage; they live only in the RHF form until the server action submits them.
 - The user can close the tab mid-flow and return — their search and seat selection are restored, but they re-enter their passport.
 - `resetBooking()` is called on (a) successful booking (in `confirmation/[pnr]/page.tsx` via `ResetBookingOnMount`), (b) cancellation, (c) logout.
 
-**Optimistic seat selection** — `selectSeatOptimistic(seat)` updates the store the moment a seat tile is clicked, *before* any RPC fires. The seat map reflects the choice instantly. If the subsequent `reserve_seat` call returns `SEAT_TAKEN` (someone else claimed it in the race), the action returns `{ error }`, the UI toasts, and `clearSeat()` is called so the user re-picks.
+**Optimistic seat selection** — `selectSeatOptimistic(seat)` updates the store the moment a seat tile is clicked, _before_ any RPC fires. The seat map reflects the choice instantly. If the subsequent `reserve_seat` call returns `SEAT_TAKEN` (someone else claimed it in the race), the action returns `{ error }`, the UI toasts, and `clearSeat()` is called so the user re-picks.
 
 ### `useUserStore` (the session)
 
@@ -206,7 +208,7 @@ The 2-hour cancel window is enforced by a **`BEFORE UPDATE` trigger** on `bookin
 
 - **Email + password** via Supabase Auth, accessed through `@supabase/ssr`.
 - `lib/supabase/server.ts` — `await cookies()`-aware server client (Next 16 requires async cookies).
-- `proxy.ts` (formerly `middleware.ts` in Next ≤15) — refreshes the session on every matched request, redirects logged-out users to `/login` *optimistically* (cookie presence only).
+- `proxy.ts` (formerly `middleware.ts` in Next ≤15) — refreshes the session on every matched request, redirects logged-out users to `/login` _optimistically_ (cookie presence only).
 - **Authoritative authz** lives in `lib/dal.ts` — `getUser()` is wrapped in React `cache()` so multiple Server Components in one render share a single auth call. Every protected page calls `requireUser()` server-side.
 
 Proxy + DAL together follow Next.js's "data security" recommendation: don't trust the proxy to enforce access, treat it as a fast cookie filter and re-check in the data layer.
@@ -256,7 +258,7 @@ In the Vercel project settings:
 - **Framework preset**: Next.js (auto-detected).
 - **Build command**: `next build` (default — Turbopack is automatic).
 
-After deploy, in your Supabase project's **Authentication → URL Configuration**, add your Vercel URL to *Site URL* and *Redirect URLs* so email-confirm links work.
+After deploy, in your Supabase project's **Authentication → URL Configuration**, add your Vercel URL to _Site URL_ and _Redirect URLs_ so email-confirm links work.
 
 ---
 
@@ -286,16 +288,12 @@ These were conscious calls given the deadline; documented here per the brief's r
 
 ## Scripts
 
-| Command | What it does |
-|---|---|
-| `npm run dev` | Dev server (Turbopack) |
-| `npm run build` | Production build |
-| `npm run start` | Run the production build locally |
-| `npm run lint` | ESLint |
-| `node scripts/generate-icons.mjs` | Regenerate PWA icons |
+| Command                           | What it does                     |
+| --------------------------------- | -------------------------------- |
+| `npm run dev`                     | Dev server (Turbopack)           |
+| `npm run build`                   | Production build                 |
+| `npm run start`                   | Run the production build locally |
+| `npm run lint`                    | ESLint                           |
+| `node scripts/generate-icons.mjs` | Regenerate PWA icons             |
 
 ---
-
-## License
-
-MIT — internship technical assignment.
