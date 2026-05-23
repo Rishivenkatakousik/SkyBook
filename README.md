@@ -7,6 +7,14 @@ A responsive, production-leaning flight booking PWA: search flights, pick a seat
 
 ---
 
+## Lighthouse
+
+90+ across Performance, Accessibility, Best Practices, and SEO (mobile, throttled).
+
+![Lighthouse report — 90+ across all categories](./public/image.png)
+
+---
+
 ## Tech stack
 
 | Layer                | Choice                                                                                               |
